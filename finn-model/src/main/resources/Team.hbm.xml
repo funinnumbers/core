@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="eu.funinnumbers.db.model.Team" table="TEAM">
+        <id name="teamId" type="int">
+            <column name="TEAM_ID" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <property name="name" column="NAME"/>
+        <property name="maxPlayers" column="MAX_PLAYERS"/>
+        <many-to-one name="battleEngine"
+                     class="eu.funinnumbers.db.model.BattleEngine"
+                     column="BATTLE_ID"
+                     cascade="save-update"
+                     lazy="false"/>
+        <set name="avatars"
+             table="AVATAR_TEAM">
+            <key column="TEAM_ID"/>
+            <many-to-many class="eu.funinnumbers.db.model.Avatar" column="AVATAR_ID"/>
+        </set>
+    </class>
+</hibernate-mapping>
+
+
+
+
+
+
+
+
+
+
+

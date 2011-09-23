@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="eu.funinnumbers.db.model.Guardian" table="GUARDIAN">
+        <id name="ID" type="int">
+            <column name="GUARDIAN_ID" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <property name="ledId" column="LED_ID"/>
+        <property name="address" column="ADDRESS" unique="true"/>
+        <property name="station" column="station"/>
+        <property name="initPhase" column="INIT_PHASE"/>
+        <property name="liferayID" column="LIFERAY_ID"/>
+        <set name="avatars"
+             table="AVATAR_GUARDIAN">
+            <key column="GUARDIAN_ID"/>
+            <many-to-many class="eu.funinnumbers.db.model.Avatar" column="AVATAR_ID"/>
+        </set>
+    </class>
+</hibernate-mapping>

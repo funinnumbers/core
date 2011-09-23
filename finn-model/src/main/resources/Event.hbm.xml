@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="eu.funinnumbers.db.model.event.Event" table="EVENT">
+        <id name="ID" type="int">
+            <column name="EVENT_ID" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <property name="type" column="TYPE"/>
+        <property name="timeStamp" column="TIMESTAMP"/>
+        <property name="description" column="DESCRIPION"/>
+        <many-to-one
+                name="battleEngine"
+                column="BATTLE_ID"
+                class="eu.funinnumbers.db.model.BattleEngine"
+                not-null="true"/>
+        <many-to-one
+                name="avatar"
+                column="AVATAR_ID"
+                class="eu.funinnumbers.db.model.Avatar"
+                not-null="true"/>
+        <many-to-one
+                name="station"
+                column="STATION_ID"
+                class="eu.funinnumbers.db.model.Station"
+                not-null="true"/>
+        <joined-subclass name="eu.funinnumbers.db.model.event.ActionEvent" table="ACTION_EVENT">
+            <key column="EVENT_ID" not-null="true"/>
+            <property name="isSuccess" column="ISSUCCESS" type="boolean"/>
+        </joined-subclass>
+        <joined-subclass name="eu.funinnumbers.db.model.event.MotionEvent" table="MOTION_EVENT">
+            <key column="EVENT_ID" not-null="true"/>
+            <property name="isLeaving" column="IS_LEAVING"/>
+        </joined-subclass>
+    </class>
+</hibernate-mapping>

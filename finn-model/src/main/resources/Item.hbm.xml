@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="eu.funinnumbers.db.model.item.Item" table="ITEM">
+        <id name="itemId" type="int">
+            <column name="ITEM_ID" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <property name="name" column="NAME" unique="true"/>
+        <property name="description" column="DESCRIPTION" unique="true"/>
+        <many-to-one
+                name="avatar"
+                column="AVATAR_ID"
+                class="eu.funinnumbers.db.model.Avatar"
+                not-null="true"/>
+        <joined-subclass name="eu.funinnumbers.db.model.item.DefenseItem" table="DEFENSE_ITEM">
+            <key column="ITEM_ID" not-null="true"/>
+            <property name="powerDefense" column="POWER_DEFENSE"/>
+        </joined-subclass>
+        <joined-subclass name="eu.funinnumbers.db.model.item.AttackItem" table="ATTACK_ITEM">
+            <key column="ITEM_ID" not-null="true"/>
+            <property name="powerAttack" column="POWER_ATTACK"/>
+            <property name="accuracy" column="ACCURACY"/>
+            <property name="weaponLimitation" column="WEAPON_LIMITATION"/>
+        </joined-subclass>
+        <joined-subclass name="eu.funinnumbers.db.model.item.ArtifactItem" table="ARTIFACT_ITEM">
+            <key column="ITEM_ID" not-null="true"/>
+            <property name="victoryPoints" column="VICTORY_POINTS"/>
+        </joined-subclass>
+
+    </class>
+</hibernate-mapping>
+

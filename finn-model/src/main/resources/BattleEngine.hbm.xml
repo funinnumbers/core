@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="eu.funinnumbers.db.model.BattleEngine" table="BATTLE_ENGINE">
+        <id name="id" type="int">
+            <column name="BATTLE_ID" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <property name="Name" column="NAME"/>
+        <property name="ipAddr" column="IP"/>
+        <property name="maxPlayers" column="MAX_PLAYERS"/>
+        <property name="status" column="STATUS"/>
+        <property name="startTime" column="START_TIME"/>
+        <property name="finishTime" column="FINISH_TIME"/>
+        <property name="trucePeriod" column="TRUCE_PERIOD"/>
+        <property name="location" column="LOCATION"/>
+        <property name="coordinates" column="COORDINATES"/>
+        <property name="isAlive" column="IS_ALIVE"/>
+        <property name="ownerId" column="LIFE_ID" not-null="true"/>
+        <set name="Stations" inverse="true">
+            <key column="BATTLE_ID"/>
+            <one-to-many class="eu.funinnumbers.db.model.Station"/>
+        </set>
+        <set name="Teams"
+             inverse="true"
+             lazy="false">
+            <key column="BATTLE_ID"/>
+            <one-to-many class="eu.funinnumbers.db.model.Team"/>
+        </set>
+        <set name="events"
+             inverse="true">
+            <key column="EVENT_ID"/>
+            <one-to-many class="eu.funinnumbers.db.model.event.Event"/>
+        </set>
+        <set name="avatars"
+             table="BATTLE_AVATAR"
+             lazy="false"
+             cascade="save-update">
+            <key column="BATTLE_ID"/>
+            <many-to-many class="eu.funinnumbers.db.model.Avatar" column="AVATAR_ID"/>
+        </set>
+    </class>
+</hibernate-mapping>
+

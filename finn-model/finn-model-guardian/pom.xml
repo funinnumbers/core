@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>FunInNumbers</groupId>
+        <artifactId>finn-model</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <groupId>FunInNumbers</groupId>
+    <artifactId>finn-model-guardian</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <src.dir>../src</src.dir>
+        <src.temp>${basedir}/target/tempsrc</src.temp>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>JBoss</id>
+            <name>The "public-jboss" repository group provides a combined view all JBoss community project artifacts
+            </name>
+            <layout>default</layout>
+            <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <sourceDirectory>${src.temp}/main/java</sourceDirectory>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>Replace sources</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target>
+                                <delete dir="${src.temp}"/>
+                                <mkdir dir="${src.temp}"/>
+                                <copy todir="${src.temp}/main/java/eu/funinnumbers/db/model">
+                                    <fileset dir="${src.dir}/main/java/eu/funinnumbers/db/model"/>
+                                </copy>
+                                <copy todir="${src.temp}/main/java/eu/funinnumbers/util">
+                                    <fileset dir="${src.dir}/main/java/eu/funinnumbers/util"/>
+                                </copy>
+
+                                <replace dir="${src.temp}/main/java/eu/funinnumbers/db">
+                                    <include name="**/*.java"/>
+                                    <replacetoken><![CDATA[java.util.Set<Station>]]></replacetoken>
+                                    <replacevalue>Object</replacevalue>
+                                </replace>
+                                <replace dir="${src.temp}/main/java/eu/funinnumbers/db">
+                                    <include name="**/*.java"/>
+                                    <replacefilter
+                                            token="java.util.Set"
+                                            value="Object"/>
+                                    <replacefilter
+                                            token="/*START_OF_COMMENT*/"
+                                            value="/*"/>
+                                    <replacefilter
+                                            token="/*END_OF_COMMENT*/"
+                                            value="*/"/>
+                                </replace>
+
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>Cleaning ${src.temp}</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <delete dir="${src.temp}"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.3</source>
+                    <target>1.3</target>
+                    <excludes>
+                        <exclude>eu/funinnumbers/util/eventconsumer/**.*</exclude>
+                        <exclude>eu/funinnumbers/db/model/localization/**.*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

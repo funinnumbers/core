@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>FunInNumbers</groupId>
+        <artifactId>finn-model</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <groupId>FunInNumbers</groupId>
+    <artifactId>finn-model-engine</artifactId>
+    <version>1.0</version>
+
+    <properties>
+        <src.dir>../src</src.dir>
+        <src.temp>${basedir}/target/tempsrc</src.temp>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>JBoss</id>
+            <name>The "public-jboss" repository group provides a combined view all JBoss community project artifacts
+            </name>
+            <layout>default</layout>
+            <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+        </repository>
+    </repositories>
+    <dependencies>
+
+
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${src.temp}/main/java</sourceDirectory>
+        <testSourceDirectory>${src.temp}/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>${src.temp}/main/resources</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>Replace sources</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target>
+                                <delete dir="${src.temp}"/>
+                                <mkdir dir="${src.temp}"/>
+                                <copy todir="${src.temp}">
+                                    <fileset dir="${src.dir}"/>
+                                </copy>
+                                <replace dir="${src.temp}">
+                                    <include name="**/*.java"/>
+                                    <replacefilter
+                                            token="/*, java.io.Serializable*/"
+                                            value=", java.io.Serializable"/>
+                                    <replacefilter
+                                            token="/*,java.io.Serializable*/"
+                                            value=", java.io.Serializable"/>
+                                    <replacefilter
+                                            token="/*implements java.io.Serializable*/"
+                                            value="implements java.io.Serializable"/>
+                                </replace>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>Cleaning ${src.temp}</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <delete dir="${src.temp}"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+
+
+</project>

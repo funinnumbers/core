@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping>
+    <class name="eu.funinnumbers.db.model.Avatar" table="AVATAR">
+        <id name="ID" type="int">
+            <column name="AVATAR_ID" not-null="true"/>
+            <generator class="native"/>
+        </id>
+        <property name="name" column="NAME" unique="true"/>
+        <property name="liferayId" column="LIFERAY_ID"/>
+        <property name="gamesWon" column="GAMES_WON"/>
+        <property name="gamesLost" column="GAMES_LOST"/>
+        <set name="battleEngines"
+             table="BATTLE_AVATAR">
+            <key column="AVATAR_ID"/>
+            <many-to-many class="eu.funinnumbers.db.model.BattleEngine" column="BATTLE_ID"/>
+        </set>
+        <set name="teams"
+             table="AVATAR_TEAM"
+             lazy="false"
+             cascade="save-update">
+            <key column="AVATAR_ID"/>
+            <many-to-many class="eu.funinnumbers.db.model.Team" column="TEAM_ID"/>
+        </set>
+        <set name="guardians"
+             table="AVATAR_GUARDIAN"
+             lazy="false"
+             cascade="save-update">
+            <key column="AVATAR_ID"/>
+            <many-to-many class="eu.funinnumbers.db.model.Guardian" column="GUARDIAN_ID"/>
+        </set>
+        <set name="events"
+             inverse="true">
+            <key column="AVATAR_ID"/>
+            <one-to-many class="eu.funinnumbers.db.model.event.Event"/>
+        </set>
+    </class>
+</hibernate-mapping>
